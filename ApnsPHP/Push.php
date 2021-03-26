@@ -79,6 +79,7 @@ class ApnsPHP_Push extends ApnsPHP_Abstract
 
 	protected $_aMessageQueue = array(); /**< @type array Message queue. */
 	protected $_aErrors = array(); /**< @type array Error container. */
+	protected $_curlOptions = [];
 
 	/**
 	 * Set the send retry times value.
@@ -275,12 +276,12 @@ class ApnsPHP_Push extends ApnsPHP_Abstract
 		    $aHeaders[] = sprintf('Authorization: Bearer %s', $this->_sProviderToken);
         }
 
-		if (!(curl_setopt_array($this->_hSocket, array(
+		if (!(curl_setopt_array($this->_hSocket, array_replace($this->_curlOptions, array(
 			CURLOPT_POST => true,
 			CURLOPT_URL => sprintf('%s/3/device/%s', $this->_aHTTPServiceURLs[$this->_nEnvironment], $message->getRecipient()),
 			CURLOPT_HTTPHEADER => $aHeaders,
 			CURLOPT_POSTFIELDS => $message->getPayload()
-		)) && ($sReply = curl_exec($this->_hSocket)) !== false)) {
+		))) && ($sReply = curl_exec($this->_hSocket)) !== false)) {
 			return false;
 		}
 
@@ -461,5 +462,12 @@ class ApnsPHP_Push extends ApnsPHP_Abstract
 			$this->_aErrors[$nMessageID] = $this->_aMessageQueue[$nMessageID];
 		}
 		unset($this->_aMessageQueue[$nMessageID]);
+	}
+
+	public function _setCurlOption($options = [])
+	{
+		$this->_curlOptions = $options;
+		
+		return $this;
 	}
 }
