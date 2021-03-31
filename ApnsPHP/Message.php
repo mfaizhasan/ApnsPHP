@@ -656,7 +656,7 @@ class ApnsPHP_Message
      */
 	 public function selfForRecipient($recipient = 0)
 	 {
-		 if (!isset($this->deviceTokens[$recipient])) {
+		 if (!isset($this->_aDeviceTokens[$recipient])) {
 			 throw new MessageException(
 				 "No recipient at index '{$recipient}'"
 			 );
@@ -664,7 +664,7 @@ class ApnsPHP_Message
  
 		 //TODO: Replace this with actuall looping over recipients
 		 $copy = clone $this;
-		 $copy->deviceTokens = [$this->deviceTokens[$recipient]];
+		 $copy->_aDeviceTokens = [$this->_aDeviceTokens[$recipient]];
  
 		 return $copy;
 	 }
