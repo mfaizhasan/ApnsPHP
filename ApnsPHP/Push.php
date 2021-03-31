@@ -118,9 +118,9 @@ class ApnsPHP_Push extends ApnsPHP_Abstract
 		for ($i = 0; $i < $nRecipients; $i++) {
 			$nMessageID = $nMessageQueueLen + $i + 1;
 			$aMessage = array(
-				'MESSAGE' => $message,
-				'ERRORS' => array()
-			);
+                'MESSAGE' => $message->selfForRecipient($i),
+                'ERRORS' => array()
+            );
 			if ($this->_nProtocol === self::PROTOCOL_BINARY) {
 				$aMessage['BINARY_NOTIFICATION'] = $this->_getBinaryNotification(
 					$message->getRecipient($i),

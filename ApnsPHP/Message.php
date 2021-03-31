@@ -645,4 +645,27 @@ class ApnsPHP_Message
 	{
 		return $this->_sCollapseId;
 	}
+
+	/**
+     * Get an object for a single recipient.
+     *
+     * @param  $recipient @type integer @optional Recipient number to return.
+     * @return Message The message configured with the token at index $recipient.
+     * @throws MessageException if no recipient number
+     *         exists.
+     */
+	 public function selfForRecipient($recipient = 0)
+	 {
+		 if (!isset($this->deviceTokens[$recipient])) {
+			 throw new MessageException(
+				 "No recipient at index '{$recipient}'"
+			 );
+		 }
+ 
+		 //TODO: Replace this with actuall looping over recipients
+		 $copy = clone $this;
+		 $copy->deviceTokens = [$this->deviceTokens[$recipient]];
+ 
+		 return $copy;
+	 }
 }
